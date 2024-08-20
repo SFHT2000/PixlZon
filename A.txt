@@ -1,0 +1,24 @@
+<?php
+$uploadDir = 'uploads/';
+$allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'video/mp4', 'application/pdf'];
+
+if (!file_exists($uploadDir)) {
+    mkdir($uploadDir, 0777, true);
+}
+
+foreach ($_FILES['files']['tmp_name'] as $key => $tmp_name) {
+    $fileName = basename($_FILES['files']['name'][$key]);
+    $fileType = $_FILES['files']['type'][$key];
+    $targetFile = $uploadDir . $fileName;
+
+    if (in_array($fileType, $allowedTypes)) {
+        if (move_uploaded_file($tmp_name, $targetFile)) {
+            echo 'Archivo ' . $fileName . ' subido exitosamente.';
+        } else {
+            echo 'Error al subir ' . $fileName . '.';
+        }
+    } else {
+        echo 'Tipo de archivo no permitido: ' . $fileName . '.';
+    }
+}
+?>
